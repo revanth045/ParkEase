@@ -307,7 +307,9 @@ export default function Landing() {
       setSmoothCarScale(prev => {
         const diff = carScaleRaw - prev;
         if (Math.abs(diff) < 0.001) return carScaleRaw;
-        return prev + diff * 0.12;
+        // Faster spring when shrinking (scroll up), slower when growing (scroll down)
+        const factor = diff < 0 ? 0.28 : 0.12;
+        return prev + diff * factor;
       });
       raf = requestAnimationFrame(animate);
     };
