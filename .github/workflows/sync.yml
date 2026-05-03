@@ -1,4 +1,4 @@
-name: CI
+name: CI & Deploy
 
 on:
   push:
@@ -9,8 +9,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  typecheck:
-    name: Type Check
+  typecheck-and-deploy:
+    name: Type Check & Deploy to Netlify
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -33,9 +33,40 @@ jobs:
       - name: Type check
         run: pnpm run typecheck
 
+      - name: Build parking app
+        run: BASE_PATH=/ PORT=3000 pnpm --filter @workspace/parking-app run build
+
+      - name: Lowercase asset filenames (Netlify compatibility)
+        run: |
+          cd artifacts/parking-app/dist/public/assets
+          for f in *; do
+            lower=$(echo "$f" | tr '[:upper:]' '[:lower:]')
+            if [ "$f" != "$lower" ]; then
+              mv "$f" "$lower"
+            fi
+          done
+          cd ../
+          sed -i 's|assets/index-[A-Za-z0-9]*\.js|'"$(ls assets/*.js | sed 's|assets/||')"'|g' index.html || true
+          sed -i 's|assets/index-[A-Za-z0-9]*\.css|'"$(ls assets/*.css | sed 's|assets/||')"'|g' index.html || true
+
+      - name: Deploy to Netlify
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        run: |
+          SITE_ID="e19f7f48-995b-433a-b46b-724641404d8e"
+          npm install -g netlify-cli --silent
+          netlify deploy \
+            --dir=artifacts/parking-app/dist/public \
+            --site=$SITE_ID \
+            --auth=$NETLIFY_AUTH_TOKEN \
+            --prod \
+            --message="Deploy from GitHub Actions — ${{ github.sha }}"
+
       - name: Confirm sync
         run: |
-          echo "Synced from Replit successfully."
+          echo "Synced from Replit and deployed to Netlify successfully."
           echo "Commit : ${{ github.sha }}"
           echo "Branch : ${{ github.ref_name }}"
           echo "Author : ${{ github.actor }}"
+          echo "Live at: https://parkease-revanth.netlify.app"
