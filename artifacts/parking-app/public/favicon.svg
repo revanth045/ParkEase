@@ -1,3 +1,14 @@
-<svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="180" height="180" rx="36" fill="#FF3C00"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- Dark navy background (matches site bg) -->
+  <rect width="64" height="64" rx="14" fill="#0b1120"/>
+  <!-- Inner container: bg-primary/10 border border-primary/30 rounded-lg -->
+  <rect x="7" y="7" width="50" height="50" rx="11" fill="#00d4ff" fill-opacity="0.10" stroke="#00d4ff" stroke-opacity="0.35" stroke-width="1.5"/>
+  <!-- Lucide Car icon exact paths (lucide-react v0.545.0), scaled to fit centered -->
+  <g transform="translate(32,32) scale(1.42) translate(-12,-12)"
+     stroke="#00d4ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/>
+    <circle cx="7" cy="17" r="2"/>
+    <path d="M9 17h6"/>
+    <circle cx="17" cy="17" r="2"/>
+  </g>
 </svg>
