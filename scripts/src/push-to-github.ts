@@ -54,8 +54,16 @@ try {
 
   const pushed = tryRun(`git push github ${branch} --follow-tags`);
   if (!pushed) {
-    console.log("Regular push failed (non-fast-forward). Replit is the source of truth — force pushing...");
-    run(`git push github ${branch} --follow-tags --force`);
+    console.warn(
+      "Push rejected (non-fast-forward). GitHub may have commits not present in Replit.\n" +
+      "Replit is the source of truth — run with FORCE=1 to override if intentional:\n" +
+      "  FORCE=1 pnpm --filter @workspace/scripts run push-github"
+    );
+    if (process.env.FORCE === "1") {
+      run(`git push github ${branch} --follow-tags --force`);
+    } else {
+      process.exit(1);
+    }
   }
 
   console.log(`\nSync complete. Branch '${branch}' is now on GitHub.`);
