@@ -1,15 +1,16 @@
-name: Sync from Replit
+name: CI
 
 on:
   push:
     branches:
       - main
       - master
+  pull_request:
   workflow_dispatch:
 
 jobs:
-  sync:
-    name: Verify & Record Sync
+  typecheck:
+    name: Type Check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -34,7 +35,7 @@ jobs:
 
       - name: Confirm sync
         run: |
-          echo "Sync from Replit completed successfully."
-          echo "Commit: ${{ github.sha }}"
-          echo "Branch: ${{ github.ref_name }}"
-          echo "Triggered by: ${{ github.actor }}"
+          echo "Synced from Replit successfully."
+          echo "Commit : ${{ github.sha }}"
+          echo "Branch : ${{ github.ref_name }}"
+          echo "Author : ${{ github.actor }}"

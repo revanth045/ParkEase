@@ -6,7 +6,7 @@ const GITHUB_REPO_URL = process.env.GITHUB_REPO_URL;
 if (!GITHUB_TOKEN) {
   console.error(
     "Error: GITHUB_TOKEN secret is not set.\n" +
-      "Add it in Replit Secrets with your GitHub Personal Access Token."
+      "Add it in Replit Secrets with your GitHub Personal Access Token (repo + workflow scopes)."
   );
   process.exit(1);
 }
@@ -25,9 +25,18 @@ const repoUrlWithToken = GITHUB_REPO_URL.replace(
   `https://${GITHUB_TOKEN}@`
 );
 
-function run(cmd: string, opts?: { cwd?: string }) {
-  console.log(`> ${cmd}`);
-  execSync(cmd, { stdio: "inherit", ...opts });
+function run(cmd: string): void {
+  console.log(`> ${cmd.replace(GITHUB_TOKEN!, "***")}`);
+  execSync(cmd, { stdio: "inherit" });
+}
+
+function tryRun(cmd: string): boolean {
+  try {
+    run(cmd);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 try {
@@ -37,15 +46,17 @@ try {
     console.log("Adding GitHub remote...");
     run(`git remote add github ${repoUrlWithToken}`);
   } else {
-    console.log("Updating GitHub remote URL...");
     run(`git remote set-url github ${repoUrlWithToken}`);
   }
 
-  const branch = execSync("git rev-parse --abbrev-ref HEAD")
-    .toString()
-    .trim();
+  const branch = execSync("git rev-parse --abbrev-ref HEAD").toString().trim();
   console.log(`Pushing branch '${branch}' to GitHub...`);
-  run(`git push github ${branch} --follow-tags --force`);
+
+  const pushed = tryRun(`git push github ${branch} --follow-tags`);
+  if (!pushed) {
+    console.log("Regular push failed (non-fast-forward). Replit is the source of truth — force pushing...");
+    run(`git push github ${branch} --follow-tags --force`);
+  }
 
   console.log(`\nSync complete. Branch '${branch}' is now on GitHub.`);
 } catch (err) {
