@@ -14,6 +14,13 @@ import {
   Wifi,
   Clock,
   Star,
+  MapPin,
+  CheckCircle2,
+  Users,
+  Quote,
+  Smartphone,
+  CreditCard,
+  Navigation,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useListSubscriptionPlans } from "@workspace/api-client-react";
@@ -75,6 +82,136 @@ function FeatureCard({
       <h3 className="text-lg font-bold mb-2 group-hover:text-primary transition-colors duration-300">{title}</h3>
       <p className="text-muted-foreground text-sm leading-relaxed">{description}</p>
       <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
+    </motion.div>
+  );
+}
+
+/* ─── Step card (How It Works) ───────────────────────────────────────── */
+function StepCard({ step, icon: Icon, title, description, delay }: {
+  step: number; icon: React.ElementType; title: string; description: string; delay: number;
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6, delay }}
+      className="relative flex flex-col items-center text-center group"
+    >
+      {/* connector line */}
+      {step < 3 && (
+        <div className="hidden md:block absolute top-10 left-[calc(50%+60px)] right-[calc(-50%+60px)] h-px bg-gradient-to-r from-primary/40 to-transparent" />
+      )}
+      <div className="relative mb-6">
+        <div className="h-20 w-20 rounded-2xl bg-card border border-border group-hover:border-primary/40 flex items-center justify-center transition-all duration-300 group-hover:shadow-[0_0_30px_hsl(195_100%_50%/0.15)]">
+          <Icon className="h-9 w-9 text-primary" />
+        </div>
+        <div className="absolute -top-3 -right-3 h-7 w-7 rounded-full bg-primary text-primary-foreground text-xs font-black flex items-center justify-center shadow-[0_0_12px_hsl(195_100%_50%/0.5)]">
+          {step}
+        </div>
+      </div>
+      <h3 className="text-lg font-bold mb-2">{title}</h3>
+      <p className="text-muted-foreground text-sm leading-relaxed max-w-[220px]">{description}</p>
+    </motion.div>
+  );
+}
+
+/* ─── Testimonial card ────────────────────────────────────────────────── */
+function TestimonialCard({ name, role, quote, rating, initials, accent, delay }: {
+  name: string; role: string; quote: string; rating: number; initials: string; accent: string; delay: number;
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6, delay }}
+      whileHover={{ y: -6, transition: { duration: 0.2 } }}
+      className="group relative p-7 rounded-2xl border border-border bg-card overflow-hidden"
+    >
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+        style={{ background: "radial-gradient(circle at 50% 0%, hsl(195 100% 50% / 0.05) 0%, transparent 70%)" }} />
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
+
+      <Quote className="h-7 w-7 text-primary/30 mb-4" />
+      <p className="text-sm text-muted-foreground leading-relaxed mb-6 italic">"{quote}"</p>
+      <div className="flex items-center gap-3">
+        <div className={`h-10 w-10 rounded-full ${accent} flex items-center justify-center text-sm font-bold text-white flex-shrink-0`}>
+          {initials}
+        </div>
+        <div>
+          <p className="font-semibold text-sm">{name}</p>
+          <p className="text-muted-foreground text-xs">{role}</p>
+        </div>
+        <div className="ml-auto flex gap-0.5">
+          {Array.from({ length: rating }).map((_, i) => (
+            <Star key={i} className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+          ))}
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+/* ─── Location card ───────────────────────────────────────────────────── */
+function LocationCard({ name, area, spots, price, amenities, delay }: {
+  name: string; area: string; spots: number; price: string; amenities: string[]; delay: number;
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6, delay }}
+      whileHover={{ y: -6, transition: { duration: 0.2 } }}
+      className="group relative rounded-2xl border border-border bg-card overflow-hidden cursor-pointer"
+    >
+      {/* map-style header */}
+      <div className="relative h-36 overflow-hidden"
+        style={{ background: "radial-gradient(ellipse at 30% 50%, hsl(215 60% 10%) 0%, hsl(215 40% 4%) 100%)" }}>
+        <div className="absolute inset-0 grid-bg opacity-40" />
+        <div className="absolute inset-0 flex items-center justify-center">
+          {/* stylised map dot grid */}
+          {[...Array(20)].map((_, i) => (
+            <div key={i} className="absolute h-1 w-1 rounded-full bg-primary/20"
+              style={{ left: `${10 + (i % 5) * 20}%`, top: `${15 + Math.floor(i / 5) * 22}%` }} />
+          ))}
+          <div className="relative flex flex-col items-center">
+            <div className="h-10 w-10 rounded-full bg-primary/20 border-2 border-primary flex items-center justify-center shadow-[0_0_20px_hsl(195_100%_50%/0.4)]">
+              <MapPin className="h-5 w-5 text-primary" />
+            </div>
+            <div className="mt-1 h-3 w-px bg-primary/50" />
+            <div className="h-1.5 w-1.5 rounded-full bg-primary/50" />
+          </div>
+        </div>
+        <div className="absolute top-3 right-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-green-500/15 border border-green-500/30">
+          <div className="h-1.5 w-1.5 rounded-full bg-green-400 animate-pulse" />
+          <span className="text-green-400 text-xs font-semibold">{spots} spots open</span>
+        </div>
+      </div>
+
+      <div className="p-5">
+        <div className="flex items-start justify-between mb-3">
+          <div>
+            <h3 className="font-bold group-hover:text-primary transition-colors duration-300">{name}</h3>
+            <p className="text-muted-foreground text-sm flex items-center gap-1 mt-0.5">
+              <Navigation className="h-3 w-3" />
+              {area}
+            </p>
+          </div>
+          <div className="text-right">
+            <p className="text-lg font-black text-primary">{price}</p>
+            <p className="text-muted-foreground text-xs">/ month</p>
+          </div>
+        </div>
+        <div className="flex flex-wrap gap-1.5">
+          {amenities.map(a => (
+            <span key={a} className="text-xs px-2.5 py-1 rounded-full bg-secondary border border-border text-muted-foreground">
+              {a}
+            </span>
+          ))}
+        </div>
+      </div>
     </motion.div>
   );
 }
@@ -402,6 +539,64 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* ── How It Works ── */}
+      <section className="py-28 px-6 relative">
+        <div className="absolute inset-0 grid-bg opacity-20 pointer-events-none" />
+        <div className="container mx-auto max-w-5xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-20"
+          >
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-primary/20 bg-primary/5 text-primary text-xs uppercase tracking-widest mb-4">
+              <CheckCircle2 className="h-3 w-3" />
+              Simple process
+            </div>
+            <h2 className="text-4xl md:text-5xl font-black tracking-tighter mb-4">
+              Park smarter in{" "}
+              <span className="text-primary text-glow-cyan">3 steps</span>
+            </h2>
+            <p className="text-muted-foreground max-w-xl mx-auto">
+              From sign-up to pulling into your spot — the entire experience takes under two minutes.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-12 md:gap-6">
+            <StepCard
+              step={1}
+              icon={Smartphone}
+              title="Pick your plan"
+              description="Choose from Basic, Pro, or Elite — monthly or yearly. Set up in under 60 seconds."
+              delay={0}
+            />
+            <StepCard
+              step={2}
+              icon={MapPin}
+              title="Reserve your spot"
+              description="Browse available spots near you, pick your preferred level and zone, confirm instantly."
+              delay={0.15}
+            />
+            <StepCard
+              step={3}
+              icon={Navigation}
+              title="Drive in & park"
+              description="Your license plate is recognised automatically. No ticket, no barrier, no hassle."
+              delay={0.3}
+            />
+          </div>
+
+          {/* visual highlight bar */}
+          <motion.div
+            initial={{ opacity: 0, scaleX: 0 }}
+            whileInView={{ opacity: 1, scaleX: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="mt-20 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent"
+          />
+        </div>
+      </section>
+
       {/* ── Features ── */}
       <section id="features" className="py-28 px-6 relative">
         <div className="absolute inset-0 grid-bg opacity-30 pointer-events-none" />
@@ -472,6 +667,82 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* ── Testimonials ── */}
+      <section className="py-28 px-6 bg-card/20 border-y border-border/40 relative overflow-hidden">
+        <div className="absolute inset-0 shimmer pointer-events-none" />
+        <div className="container mx-auto max-w-6xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-14"
+          >
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-primary/20 bg-primary/5 text-primary text-xs uppercase tracking-widest mb-4">
+              <Users className="h-3 w-3" />
+              Customer stories
+            </div>
+            <h2 className="text-4xl md:text-5xl font-black tracking-tighter mb-4">
+              Loved by{" "}
+              <span className="text-primary text-glow-cyan">10,000+ drivers</span>
+            </h2>
+            <p className="text-muted-foreground max-w-xl mx-auto">
+              Real reviews from real ParkEase subscribers who've made the switch.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            <TestimonialCard
+              name="Alexandra M."
+              role="Executive, Downtown Finance District"
+              quote="I used to circle the block for 20 minutes every morning. With ParkEase Pro my spot is reserved before I even leave home. Game-changer for my commute."
+              rating={5}
+              initials="AM"
+              accent="bg-primary/70"
+              delay={0}
+            />
+            <TestimonialCard
+              name="James T."
+              role="Software Engineer, Tech Hub"
+              quote="The licence plate recognition is flawless — I literally never touch my phone or a ticket machine. Just drive in and the gate opens. It feels like magic."
+              rating={5}
+              initials="JT"
+              accent="bg-amber-500/80"
+              delay={0.1}
+            />
+            <TestimonialCard
+              name="Priya S."
+              role="Consultant, Business Centre"
+              quote="Switched from a monthly lot pass to ParkEase Elite. The EV charging included in the plan alone saves me $80 a month. The app is incredibly slick."
+              rating={5}
+              initials="PS"
+              accent="bg-green-600/80"
+              delay={0.2}
+            />
+          </div>
+
+          {/* social proof strip */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.4 }}
+            className="mt-12 flex flex-wrap items-center justify-center gap-8 text-muted-foreground text-sm"
+          >
+            {[
+              { value: "4.9★", label: "App Store rating" },
+              { value: "4.8★", label: "Google Play rating" },
+              { value: "98%", label: "Would recommend" },
+              { value: "< 2 min", label: "Avg. setup time" },
+            ].map(({ value, label }) => (
+              <div key={label} className="flex flex-col items-center gap-1">
+                <span className="text-2xl font-black text-white">{value}</span>
+                <span className="text-xs uppercase tracking-widest">{label}</span>
+              </div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
       {/* ── Pricing ── */}
       <section id="plans" className="py-28 px-6 bg-card/20 border-y border-border/40">
         <div className="container mx-auto max-w-6xl">
@@ -528,6 +799,157 @@ export default function Landing() {
             {!plans && [0, 1, 2].map((i) => (
               <div key={i} className="h-96 rounded-2xl border border-border bg-card animate-pulse" />
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Locations ── */}
+      <section className="py-28 px-6 relative">
+        <div className="absolute inset-0 grid-bg opacity-20 pointer-events-none" />
+        <div className="container mx-auto max-w-6xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-14"
+          >
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-primary/20 bg-primary/5 text-primary text-xs uppercase tracking-widest mb-4">
+              <MapPin className="h-3 w-3" />
+              50+ facilities
+            </div>
+            <h2 className="text-4xl md:text-5xl font-black tracking-tighter mb-4">
+              Premium spots{" "}
+              <span className="text-primary text-glow-cyan">near you</span>
+            </h2>
+            <p className="text-muted-foreground max-w-xl mx-auto">
+              Strategically located across the city's busiest districts — each facility is managed, monitored, and maintained to the highest standard.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-6 mb-10">
+            <LocationCard
+              name="Downtown Financial Hub"
+              area="Central Business District"
+              spots={14}
+              price="$89"
+              amenities={["24/7 Access", "CCTV", "EV Charging", "Covered"]}
+              delay={0}
+            />
+            <LocationCard
+              name="Midtown Plaza"
+              area="Midtown, Level 2–5"
+              spots={8}
+              price="$69"
+              amenities={["24/7 Access", "Valet", "Bike Storage"]}
+              delay={0.1}
+            />
+            <LocationCard
+              name="Riverside Towers"
+              area="Waterfront District"
+              spots={12}
+              price="$79"
+              amenities={["24/7 Access", "CCTV", "EV Charging", "Valet"]}
+              delay={0.2}
+            />
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3 }}
+            className="text-center"
+          >
+            <Link href="/spots">
+              <Button
+                variant="outline"
+                className="rounded-full px-8 h-11 border-border/60 hover:border-primary/40 hover:bg-primary/5 hover:text-primary transition-all duration-300 group"
+              >
+                View all locations
+                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Button>
+            </Link>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ── Why ParkEase — split feature ── */}
+      <section className="py-28 px-6 bg-card/20 border-y border-border/40 relative overflow-hidden">
+        <div className="absolute inset-0 shimmer pointer-events-none" />
+        <div className="container mx-auto max-w-6xl">
+          <div className="grid md:grid-cols-2 gap-16 items-center">
+            {/* left */}
+            <motion.div
+              initial={{ opacity: 0, x: -40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+            >
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-primary/20 bg-primary/5 text-primary text-xs uppercase tracking-widest mb-6">
+                <BarChart3 className="h-3 w-3" />
+                Why ParkEase
+              </div>
+              <h2 className="text-4xl md:text-5xl font-black tracking-tighter leading-tight mb-6">
+                Traditional parking<br />
+                <span className="text-primary text-glow-cyan">is broken.</span>
+              </h2>
+              <p className="text-muted-foreground mb-8 leading-relaxed">
+                Circling blocks, hunting for coins, paper tickets — the old way wastes your time and money. ParkEase eliminates every point of friction with intelligent automation.
+              </p>
+              <div className="space-y-4">
+                {[
+                  { label: "No more searching for a spot", sub: "Your reserved space waits the moment you arrive" },
+                  { label: "No cash, no tickets, no delays", sub: "Billing handled automatically on your subscription" },
+                  { label: "Real-time availability at a glance", sub: "Live occupancy data from IoT sensors across all levels" },
+                  { label: "Cancel or change anytime", sub: "Full flexibility — no lock-in contracts, ever" },
+                ].map(({ label, sub }) => (
+                  <div key={label} className="flex items-start gap-3">
+                    <div className="h-5 w-5 rounded-full bg-primary/15 border border-primary/30 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <CheckCircle2 className="h-3 w-3 text-primary" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold">{label}</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">{sub}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* right — comparison table */}
+            <motion.div
+              initial={{ opacity: 0, x: 40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+              className="rounded-2xl border border-border bg-card overflow-hidden"
+            >
+              {/* header */}
+              <div className="grid grid-cols-3 text-xs font-bold uppercase tracking-widest px-5 py-4 bg-secondary/50 border-b border-border">
+                <span className="text-muted-foreground">Feature</span>
+                <span className="text-center text-muted-foreground">Traditional</span>
+                <span className="text-center text-primary">ParkEase</span>
+              </div>
+              {[
+                ["Reserved spot", false, true],
+                ["Auto payment", false, true],
+                ["Real-time data", false, true],
+                ["EV charging", false, true],
+                ["24/7 support", false, true],
+                ["Mobile app", false, true],
+                ["Cancel anytime", false, true],
+              ].map(([feature, legacy, modern]) => (
+                <div key={feature as string} className="grid grid-cols-3 items-center px-5 py-3.5 border-b border-border/40 last:border-0 hover:bg-secondary/20 transition-colors">
+                  <span className="text-sm text-muted-foreground">{feature as string}</span>
+                  <div className="flex justify-center">
+                    <span className="text-red-500/60 text-lg font-bold">{legacy ? "✓" : "✗"}</span>
+                  </div>
+                  <div className="flex justify-center">
+                    <span className="text-primary text-lg font-bold">{modern ? "✓" : "✗"}</span>
+                  </div>
+                </div>
+              ))}
+            </motion.div>
           </div>
         </div>
       </section>
