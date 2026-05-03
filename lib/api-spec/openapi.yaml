@@ -3,20 +3,29 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: ParkEase parking subscription API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: spots
+    description: Parking spot operations
+  - name: subscriptions
+    description: Subscription plan operations
+  - name: bookings
+    description: Booking operations
+  - name: vehicles
+    description: Vehicle operations
+  - name: stats
+    description: Dashboard statistics
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,6 +33,405 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /spots:
+    get:
+      operationId: listSpots
+      tags: [spots]
+      summary: List all parking spots
+      parameters:
+        - name: zone
+          in: query
+          schema:
+            type: string
+        - name: available
+          in: query
+          schema:
+            type: boolean
+        - name: spotType
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of parking spots
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ParkingSpot"
+    post:
+      operationId: createSpot
+      tags: [spots]
+      summary: Create a parking spot
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateSpotBody"
+      responses:
+        "201":
+          description: Created spot
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ParkingSpot"
+
+  /spots/{id}:
+    get:
+      operationId: getSpot
+      tags: [spots]
+      summary: Get a parking spot
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Parking spot
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ParkingSpot"
+    patch:
+      operationId: updateSpot
+      tags: [spots]
+      summary: Update a parking spot
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateSpotBody"
+      responses:
+        "200":
+          description: Updated spot
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ParkingSpot"
+
+  /subscription-plans:
+    get:
+      operationId: listSubscriptionPlans
+      tags: [subscriptions]
+      summary: List all subscription plans
+      responses:
+        "200":
+          description: List of plans
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SubscriptionPlan"
+    post:
+      operationId: createSubscriptionPlan
+      tags: [subscriptions]
+      summary: Create a subscription plan
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateSubscriptionPlanBody"
+      responses:
+        "201":
+          description: Created plan
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubscriptionPlan"
+
+  /subscriptions:
+    get:
+      operationId: listSubscriptions
+      tags: [subscriptions]
+      summary: List all subscriptions
+      responses:
+        "200":
+          description: List of subscriptions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Subscription"
+    post:
+      operationId: createSubscription
+      tags: [subscriptions]
+      summary: Create a new subscription
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateSubscriptionBody"
+      responses:
+        "201":
+          description: Created subscription
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Subscription"
+
+  /subscriptions/{id}:
+    get:
+      operationId: getSubscription
+      tags: [subscriptions]
+      summary: Get a subscription
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Subscription
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Subscription"
+    patch:
+      operationId: updateSubscription
+      tags: [subscriptions]
+      summary: Update a subscription (cancel, renew, change plan)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateSubscriptionBody"
+      responses:
+        "200":
+          description: Updated subscription
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Subscription"
+
+  /bookings:
+    get:
+      operationId: listBookings
+      tags: [bookings]
+      summary: List all bookings
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+        - name: vehicleId
+          in: query
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of bookings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Booking"
+    post:
+      operationId: createBooking
+      tags: [bookings]
+      summary: Create a booking
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateBookingBody"
+      responses:
+        "201":
+          description: Created booking
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Booking"
+
+  /bookings/{id}:
+    get:
+      operationId: getBooking
+      tags: [bookings]
+      summary: Get a booking
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Booking
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Booking"
+    patch:
+      operationId: updateBooking
+      tags: [bookings]
+      summary: Update booking status
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateBookingBody"
+      responses:
+        "200":
+          description: Updated booking
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Booking"
+
+  /vehicles:
+    get:
+      operationId: listVehicles
+      tags: [vehicles]
+      summary: List all registered vehicles
+      responses:
+        "200":
+          description: List of vehicles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Vehicle"
+    post:
+      operationId: createVehicle
+      tags: [vehicles]
+      summary: Register a vehicle
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateVehicleBody"
+      responses:
+        "201":
+          description: Created vehicle
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Vehicle"
+
+  /vehicles/{id}:
+    get:
+      operationId: getVehicle
+      tags: [vehicles]
+      summary: Get a vehicle
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Vehicle
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Vehicle"
+    delete:
+      operationId: deleteVehicle
+      tags: [vehicles]
+      summary: Remove a vehicle
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /stats/dashboard:
+    get:
+      operationId: getDashboardStats
+      tags: [stats]
+      summary: Get dashboard overview statistics
+      responses:
+        "200":
+          description: Dashboard stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardStats"
+
+  /stats/occupancy:
+    get:
+      operationId: getOccupancyStats
+      tags: [stats]
+      summary: Get occupancy breakdown by zone
+      responses:
+        "200":
+          description: Occupancy stats
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ZoneOccupancy"
+
+  /stats/revenue:
+    get:
+      operationId: getRevenueStats
+      tags: [stats]
+      summary: Get monthly revenue data for charts
+      responses:
+        "200":
+          description: Revenue data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/RevenueDataPoint"
+
+  /stats/recent-activity:
+    get:
+      operationId: getRecentActivity
+      tags: [stats]
+      summary: Get recent activity feed
+      responses:
+        "200":
+          description: Recent activity
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ActivityItem"
+
 components:
   schemas:
     HealthStatus:
@@ -31,6 +439,377 @@ components:
       properties:
         status:
           type: string
-      required:
-        - status
+      required: [status]
 
+    ParkingSpot:
+      type: object
+      properties:
+        id:
+          type: integer
+        spotNumber:
+          type: string
+        zone:
+          type: string
+        floor:
+          type: string
+        spotType:
+          type: string
+          enum: [standard, compact, ev, handicap, premium]
+        isAvailable:
+          type: boolean
+        isReserved:
+          type: boolean
+        monthlyRate:
+          type: number
+        hourlyRate:
+          type: number
+        features:
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: string
+      required: [id, spotNumber, zone, floor, spotType, isAvailable, isReserved, monthlyRate, hourlyRate, features, createdAt]
+
+    CreateSpotBody:
+      type: object
+      properties:
+        spotNumber:
+          type: string
+        zone:
+          type: string
+        floor:
+          type: string
+        spotType:
+          type: string
+          enum: [standard, compact, ev, handicap, premium]
+        monthlyRate:
+          type: number
+        hourlyRate:
+          type: number
+        features:
+          type: array
+          items:
+            type: string
+      required: [spotNumber, zone, floor, spotType, monthlyRate, hourlyRate]
+
+    UpdateSpotBody:
+      type: object
+      properties:
+        isAvailable:
+          type: boolean
+        isReserved:
+          type: boolean
+        monthlyRate:
+          type: number
+        hourlyRate:
+          type: number
+
+    SubscriptionPlan:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        priceMonthly:
+          type: number
+        priceYearly:
+          type: number
+        features:
+          type: array
+          items:
+            type: string
+        maxVehicles:
+          type: integer
+        spotType:
+          type: string
+          enum: [standard, compact, ev, handicap, premium, any]
+        isPopular:
+          type: boolean
+        color:
+          type: string
+      required: [id, name, description, priceMonthly, priceYearly, features, maxVehicles, spotType, isPopular, color]
+
+    CreateSubscriptionPlanBody:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        priceMonthly:
+          type: number
+        priceYearly:
+          type: number
+        features:
+          type: array
+          items:
+            type: string
+        maxVehicles:
+          type: integer
+        spotType:
+          type: string
+        isPopular:
+          type: boolean
+        color:
+          type: string
+      required: [name, description, priceMonthly, priceYearly, features, maxVehicles, spotType]
+
+    Subscription:
+      type: object
+      properties:
+        id:
+          type: integer
+        customerName:
+          type: string
+        customerEmail:
+          type: string
+        customerPhone:
+          type: string
+        planId:
+          type: integer
+        planName:
+          type: string
+        spotId:
+          type: integer
+        spotNumber:
+          type: string
+        vehicleId:
+          type: integer
+        status:
+          type: string
+          enum: [active, cancelled, expired, pending]
+        billingCycle:
+          type: string
+          enum: [monthly, yearly]
+        startDate:
+          type: string
+        endDate:
+          type: string
+        nextBillingDate:
+          type: string
+        amount:
+          type: number
+        createdAt:
+          type: string
+      required: [id, customerName, customerEmail, planId, planName, status, billingCycle, startDate, endDate, nextBillingDate, amount, createdAt]
+
+    CreateSubscriptionBody:
+      type: object
+      properties:
+        customerName:
+          type: string
+        customerEmail:
+          type: string
+        customerPhone:
+          type: string
+        planId:
+          type: integer
+        spotId:
+          type: integer
+        vehicleId:
+          type: integer
+        billingCycle:
+          type: string
+          enum: [monthly, yearly]
+        startDate:
+          type: string
+      required: [customerName, customerEmail, planId, billingCycle, startDate]
+
+    UpdateSubscriptionBody:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [active, cancelled, expired, pending]
+        planId:
+          type: integer
+        billingCycle:
+          type: string
+          enum: [monthly, yearly]
+
+    Booking:
+      type: object
+      properties:
+        id:
+          type: integer
+        customerName:
+          type: string
+        customerEmail:
+          type: string
+        vehicleId:
+          type: integer
+        licensePlate:
+          type: string
+        spotId:
+          type: integer
+        spotNumber:
+          type: string
+        zone:
+          type: string
+        status:
+          type: string
+          enum: [active, completed, cancelled]
+        startTime:
+          type: string
+        endTime:
+          type: string
+        durationHours:
+          type: number
+        totalAmount:
+          type: number
+        createdAt:
+          type: string
+      required: [id, customerName, customerEmail, spotId, spotNumber, zone, status, startTime, totalAmount, createdAt]
+
+    CreateBookingBody:
+      type: object
+      properties:
+        customerName:
+          type: string
+        customerEmail:
+          type: string
+        vehicleId:
+          type: integer
+        licensePlate:
+          type: string
+        spotId:
+          type: integer
+        startTime:
+          type: string
+        durationHours:
+          type: number
+      required: [customerName, customerEmail, spotId, startTime, durationHours]
+
+    UpdateBookingBody:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [active, completed, cancelled]
+        endTime:
+          type: string
+
+    Vehicle:
+      type: object
+      properties:
+        id:
+          type: integer
+        ownerName:
+          type: string
+        ownerEmail:
+          type: string
+        licensePlate:
+          type: string
+        make:
+          type: string
+        model:
+          type: string
+        year:
+          type: integer
+        color:
+          type: string
+        vehicleType:
+          type: string
+          enum: [sedan, suv, truck, compact, ev, motorcycle]
+        createdAt:
+          type: string
+      required: [id, ownerName, ownerEmail, licensePlate, make, model, year, color, vehicleType, createdAt]
+
+    CreateVehicleBody:
+      type: object
+      properties:
+        ownerName:
+          type: string
+        ownerEmail:
+          type: string
+        licensePlate:
+          type: string
+        make:
+          type: string
+        model:
+          type: string
+        year:
+          type: integer
+        color:
+          type: string
+        vehicleType:
+          type: string
+          enum: [sedan, suv, truck, compact, ev, motorcycle]
+      required: [ownerName, ownerEmail, licensePlate, make, model, year, color, vehicleType]
+
+    DashboardStats:
+      type: object
+      properties:
+        totalSpots:
+          type: integer
+        availableSpots:
+          type: integer
+        occupiedSpots:
+          type: integer
+        occupancyRate:
+          type: number
+        activeSubscriptions:
+          type: integer
+        monthlyRevenue:
+          type: number
+        totalVehicles:
+          type: integer
+        activeBookings:
+          type: integer
+        revenueGrowth:
+          type: number
+        subscriptionGrowth:
+          type: number
+      required: [totalSpots, availableSpots, occupiedSpots, occupancyRate, activeSubscriptions, monthlyRevenue, totalVehicles, activeBookings, revenueGrowth, subscriptionGrowth]
+
+    ZoneOccupancy:
+      type: object
+      properties:
+        zone:
+          type: string
+        total:
+          type: integer
+        occupied:
+          type: integer
+        available:
+          type: integer
+        occupancyRate:
+          type: number
+      required: [zone, total, occupied, available, occupancyRate]
+
+    RevenueDataPoint:
+      type: object
+      properties:
+        month:
+          type: string
+        revenue:
+          type: number
+        subscriptions:
+          type: integer
+        bookings:
+          type: integer
+      required: [month, revenue, subscriptions, bookings]
+
+    ActivityItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+          enum: [subscription_created, subscription_cancelled, booking_started, booking_completed, vehicle_registered]
+        description:
+          type: string
+        customerName:
+          type: string
+        spotNumber:
+          type: string
+        amount:
+          type: number
+        timestamp:
+          type: string
+      required: [id, type, description, customerName, timestamp]
