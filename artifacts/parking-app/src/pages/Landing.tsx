@@ -295,11 +295,11 @@ export default function Landing() {
     return () => window.removeEventListener("scroll", update);
   }, []);
 
-  // Vehicle scale: 0.28 → 6 over 1400px of scroll
+  // Vehicle scale: 0.28 → 6 over 800px of scroll
   const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
   const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
-  const carScaleRaw = lerp(0.28, 6, clamp(scrollPx / 1400, 0, 1));
+  const carScaleRaw = lerp(0.28, 6, clamp(scrollPx / 800, 0, 1));
   const [smoothCarScale, setSmoothCarScale] = React.useState(0.28);
   React.useEffect(() => {
     let raf: number;
@@ -315,16 +315,16 @@ export default function Landing() {
     return () => cancelAnimationFrame(raf);
   }, [carScaleRaw]);
 
-  // Hero text opacity: 1 → 0 over 0–350px scroll
-  const heroTextOpacity = clamp(1 - scrollPx / 350, 0, 1);
+  // Hero text opacity: 1 → 0 over 0–200px scroll
+  const heroTextOpacity = clamp(1 - scrollPx / 200, 0, 1);
   const heroTextY = clamp(-scrollPx * 0.17, -60, 0);
 
-  // Car opacity: 1 → 0 over 900–1300px
-  const carOpacity = clamp(1 - (scrollPx - 900) / 400, 0, 1);
+  // Car opacity: 1 → 0 over 550–800px
+  const carOpacity = clamp(1 - (scrollPx - 550) / 250, 0, 1);
 
   // Mid-scroll label
-  const zoomLabelT = clamp((scrollPx - 200) / 200, 0, 1);
-  const zoomLabelFade = clamp(1 - (scrollPx - 900) / 200, 0, 1);
+  const zoomLabelT = clamp((scrollPx - 100) / 150, 0, 1);
+  const zoomLabelFade = clamp(1 - (scrollPx - 550) / 150, 0, 1);
   const zoomLabelOpacity = zoomLabelT * zoomLabelFade;
 
   const particles = React.useMemo(() =>
@@ -398,7 +398,7 @@ export default function Landing() {
       </nav>
 
       {/* ── Hero + Scroll-Zoom Vehicle Section ── */}
-      <section className="relative" style={{ height: "280vh" }}>
+      <section className="relative" style={{ height: "160vh" }}>
         <div className="sticky top-0 h-screen overflow-hidden flex flex-col items-center justify-center">
           {/* Background grid */}
           <div className="absolute inset-0 grid-bg opacity-60 z-0" />
@@ -540,14 +540,14 @@ export default function Landing() {
       </section>
 
       {/* ── How It Works ── */}
-      <section className="py-28 px-6 relative">
+      <section className="py-16 px-6 relative">
         <div className="absolute inset-0 grid-bg opacity-20 pointer-events-none" />
         <div className="container mx-auto max-w-5xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-20"
+            className="text-center mb-12"
           >
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-primary/20 bg-primary/5 text-primary text-xs uppercase tracking-widest mb-4">
               <CheckCircle2 className="h-3 w-3" />
@@ -598,14 +598,14 @@ export default function Landing() {
       </section>
 
       {/* ── Features ── */}
-      <section id="features" className="py-28 px-6 relative">
+      <section id="features" className="py-16 px-6 relative">
         <div className="absolute inset-0 grid-bg opacity-30 pointer-events-none" />
         <div className="container mx-auto max-w-6xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="text-center mb-10"
           >
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-primary/20 bg-primary/5 text-primary text-xs uppercase tracking-widest mb-4">
               <Zap className="h-3 w-3" />
@@ -668,14 +668,14 @@ export default function Landing() {
       </section>
 
       {/* ── Testimonials ── */}
-      <section className="py-28 px-6 bg-card/20 border-y border-border/40 relative overflow-hidden">
+      <section className="py-16 px-6 bg-card/20 border-y border-border/40 relative overflow-hidden">
         <div className="absolute inset-0 shimmer pointer-events-none" />
         <div className="container mx-auto max-w-6xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-14"
+            className="text-center mb-10"
           >
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-primary/20 bg-primary/5 text-primary text-xs uppercase tracking-widest mb-4">
               <Users className="h-3 w-3" />
@@ -744,13 +744,13 @@ export default function Landing() {
       </section>
 
       {/* ── Pricing ── */}
-      <section id="plans" className="py-28 px-6 bg-card/20 border-y border-border/40">
+      <section id="plans" className="py-16 px-6 bg-card/20 border-y border-border/40">
         <div className="container mx-auto max-w-6xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-14"
+            className="text-center mb-10"
           >
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-primary/20 bg-primary/5 text-primary text-xs uppercase tracking-widest mb-4">
               <Star className="h-3 w-3" />
@@ -804,14 +804,14 @@ export default function Landing() {
       </section>
 
       {/* ── Locations ── */}
-      <section className="py-28 px-6 relative">
+      <section className="py-16 px-6 relative">
         <div className="absolute inset-0 grid-bg opacity-20 pointer-events-none" />
         <div className="container mx-auto max-w-6xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-14"
+            className="text-center mb-10"
           >
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-primary/20 bg-primary/5 text-primary text-xs uppercase tracking-widest mb-4">
               <MapPin className="h-3 w-3" />
@@ -874,10 +874,10 @@ export default function Landing() {
       </section>
 
       {/* ── Why ParkEase — split feature ── */}
-      <section className="py-28 px-6 bg-card/20 border-y border-border/40 relative overflow-hidden">
+      <section className="py-16 px-6 bg-card/20 border-y border-border/40 relative overflow-hidden">
         <div className="absolute inset-0 shimmer pointer-events-none" />
         <div className="container mx-auto max-w-6xl">
-          <div className="grid md:grid-cols-2 gap-16 items-center">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* left */}
             <motion.div
               initial={{ opacity: 0, x: -40 }}
@@ -955,7 +955,7 @@ export default function Landing() {
       </section>
 
       {/* ── CTA ── */}
-      <section className="py-32 px-6 relative overflow-hidden">
+      <section className="py-20 px-6 relative overflow-hidden">
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <div className="w-[600px] h-[400px] rounded-full blur-[120px] opacity-10"
             style={{ background: "radial-gradient(ellipse, hsl(195 100% 50%) 0%, transparent 70%)" }} />
