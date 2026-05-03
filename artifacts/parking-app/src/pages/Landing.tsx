@@ -18,189 +18,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { useListSubscriptionPlans } from "@workspace/api-client-react";
 
-/* ─── SVG Car ─────────────────────────────────────────────────────────── */
-function SleekCar({ glowIntensity = 1 }: { glowIntensity?: number }) {
-  return (
-    <svg
-      viewBox="0 0 900 340"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className="w-full h-full"
-      style={{ filter: `drop-shadow(0 0 ${40 * glowIntensity}px rgba(0,210,255,${0.5 * glowIntensity})) drop-shadow(0 0 ${80 * glowIntensity}px rgba(0,180,255,${0.2 * glowIntensity}))` }}
-    >
-      <defs>
-        <linearGradient id="bodyGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#1a4f6e" />
-          <stop offset="40%" stopColor="#0d3a54" />
-          <stop offset="100%" stopColor="#061e2e" />
-        </linearGradient>
-        <linearGradient id="roofGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#2a7fa8" />
-          <stop offset="100%" stopColor="#0d3a54" />
-        </linearGradient>
-        <linearGradient id="glassGrad" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#00d4ff" stopOpacity="0.6" />
-          <stop offset="100%" stopColor="#0066aa" stopOpacity="0.2" />
-        </linearGradient>
-        <linearGradient id="wheelGrad" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#2a2a2a" />
-          <stop offset="100%" stopColor="#111" />
-        </linearGradient>
-        <radialGradient id="rimGrad" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#00d4ff" stopOpacity="0.8" />
-          <stop offset="70%" stopColor="#004466" stopOpacity="0.4" />
-          <stop offset="100%" stopColor="#001a2e" stopOpacity="0.2" />
-        </radialGradient>
-        <radialGradient id="headlightGrad" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#ffffff" />
-          <stop offset="40%" stopColor="#00d4ff" />
-          <stop offset="100%" stopColor="#003355" stopOpacity="0" />
-        </radialGradient>
-        <radialGradient id="taillightGrad" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#ff4444" />
-          <stop offset="60%" stopColor="#cc0000" />
-          <stop offset="100%" stopColor="#330000" stopOpacity="0" />
-        </radialGradient>
-        <filter id="glow">
-          <feGaussianBlur stdDeviation="4" result="blur" />
-          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
-      </defs>
-
-      {/* Ground shadow */}
-      <ellipse cx="450" cy="310" rx="370" ry="18" fill="rgba(0,0,0,0.5)" />
-
-      {/* Ground reflection */}
-      <ellipse cx="450" cy="308" rx="320" ry="6" fill="rgba(0,210,255,0.04)" />
-
-      {/* Main body lower */}
-      <path d="M80 240 Q85 200 120 195 L780 195 Q820 195 825 230 L840 270 Q845 285 820 290 L80 290 Q60 288 65 270 Z" fill="url(#bodyGrad)" />
-
-      {/* Body side panel accent line */}
-      <path d="M130 230 L780 230" stroke="rgba(0,210,255,0.15)" strokeWidth="1.5" />
-      <path d="M130 250 L780 250" stroke="rgba(0,210,255,0.08)" strokeWidth="1" />
-
-      {/* Roof / cabin */}
-      <path d="M270 195 Q300 120 360 108 L570 108 Q640 112 670 195 Z" fill="url(#roofGrad)" />
-
-      {/* Roof highlight */}
-      <path d="M300 185 Q330 130 380 118 L555 118 Q615 125 640 185 Z" fill="rgba(255,255,255,0.04)" />
-
-      {/* Front windshield */}
-      <path d="M620 195 Q650 140 660 112 L570 108 Q610 120 620 195 Z" fill="url(#glassGrad)" filter="url(#glow)" />
-
-      {/* Rear windshield */}
-      <path d="M280 195 Q275 140 270 112 L360 108 Q320 130 310 195 Z" fill="url(#glassGrad)" filter="url(#glow)" />
-
-      {/* Side windows */}
-      <path d="M320 195 L340 120 L450 118 L450 195 Z" fill="url(#glassGrad)" opacity="0.8" />
-      <path d="M460 195 L460 118 L560 120 L610 195 Z" fill="url(#glassGrad)" opacity="0.8" />
-
-      {/* Window pillars */}
-      <line x1="450" y1="118" x2="450" y2="195" stroke="rgba(0,210,255,0.3)" strokeWidth="3" />
-
-      {/* Front bumper/fascia */}
-      <path d="M780 195 Q830 200 845 225 L845 270 L780 270 Z" fill="#0a2a3e" />
-      <path d="M790 210 Q825 215 835 235 L835 258 L790 258 Z" fill="#061520" />
-
-      {/* Rear bumper */}
-      <path d="M120 195 Q75 202 68 228 L65 270 L120 270 Z" fill="#0a2a3e" />
-
-      {/* Headlights */}
-      <ellipse cx="830" cy="225" rx="12" ry="8" fill="url(#headlightGrad)" filter="url(#glow)" />
-      <ellipse cx="828" cy="225" rx="8" ry="5" fill="white" opacity="0.9" />
-      {/* headlight glow ray */}
-      <path d="M842 222 L900 190 L900 200 L842 228 Z" fill="rgba(0,212,255,0.06)" />
-      <path d="M842 225 L910 220 L910 230 L842 225 Z" fill="rgba(0,212,255,0.04)" />
-
-      {/* DRL strip */}
-      <path d="M800 213 Q815 210 835 213" stroke="rgba(0,220,255,0.8)" strokeWidth="2" fill="none" />
-
-      {/* Taillights */}
-      <rect x="68" y="215" width="16" height="20" rx="3" fill="url(#taillightGrad)" filter="url(#glow)" />
-      {/* taillight glow */}
-      <path d="M68 215 L20 205 L20 240 L68 235 Z" fill="rgba(255,50,50,0.04)" />
-
-      {/* Rear light strip */}
-      <path d="M80 218 Q90 216 105 218" stroke="rgba(255,60,60,0.7)" strokeWidth="1.5" fill="none" />
-
-      {/* Door lines */}
-      <path d="M320 200 L320 278" stroke="rgba(0,210,255,0.12)" strokeWidth="1" />
-      <path d="M460 200 L460 278" stroke="rgba(0,210,255,0.12)" strokeWidth="1" />
-      <path d="M610 200 L610 278" stroke="rgba(0,210,255,0.12)" strokeWidth="1" />
-
-      {/* Door handles */}
-      <rect x="380" y="238" width="30" height="5" rx="2.5" fill="rgba(0,210,255,0.4)" />
-      <rect x="520" y="238" width="30" height="5" rx="2.5" fill="rgba(0,210,255,0.4)" />
-
-      {/* Rocker panel / side skirt */}
-      <path d="M155 278 L760 278 L760 290 Q760 295 750 295 L165 295 Q155 295 155 290 Z" fill="#051525" />
-      <path d="M155 278 L760 278" stroke="rgba(0,210,255,0.2)" strokeWidth="1" />
-
-      {/* Front wheel arch */}
-      <path d="M170 290 Q170 205 245 205 Q320 205 320 290 Z" fill="#061a28" />
-      <circle cx="245" cy="280" r="70" fill="url(#wheelGrad)" />
-      <circle cx="245" cy="280" r="65" fill="#0a0a0a" />
-      {/* Rim spokes */}
-      {[0,60,120,180,240,300].map((angle, i) => (
-        <line
-          key={i}
-          x1={245 + 8 * Math.cos(angle * Math.PI / 180)}
-          y1={280 + 8 * Math.sin(angle * Math.PI / 180)}
-          x2={245 + 52 * Math.cos(angle * Math.PI / 180)}
-          y2={280 + 52 * Math.sin(angle * Math.PI / 180)}
-          stroke="rgba(0,210,255,0.6)"
-          strokeWidth="3"
-          strokeLinecap="round"
-        />
-      ))}
-      <circle cx="245" cy="280" r="55" fill="none" stroke="rgba(0,210,255,0.15)" strokeWidth="1" />
-      <circle cx="245" cy="280" r="8" fill="url(#rimGrad)" />
-      <circle cx="245" cy="280" r="5" fill="#00d4ff" opacity="0.8" />
-
-      {/* Front brake caliper */}
-      <rect x="220" y="255" width="14" height="24" rx="3" fill="rgba(255,60,60,0.7)" />
-
-      {/* Rear wheel arch */}
-      <path d="M625 290 Q625 205 700 205 Q775 205 775 290 Z" fill="#061a28" />
-      <circle cx="700" cy="280" r="70" fill="url(#wheelGrad)" />
-      <circle cx="700" cy="280" r="65" fill="#0a0a0a" />
-      {[0,60,120,180,240,300].map((angle, i) => (
-        <line
-          key={i}
-          x1={700 + 8 * Math.cos(angle * Math.PI / 180)}
-          y1={280 + 8 * Math.sin(angle * Math.PI / 180)}
-          x2={700 + 52 * Math.cos(angle * Math.PI / 180)}
-          y2={280 + 52 * Math.sin(angle * Math.PI / 180)}
-          stroke="rgba(0,210,255,0.6)"
-          strokeWidth="3"
-          strokeLinecap="round"
-        />
-      ))}
-      <circle cx="700" cy="280" r="55" fill="none" stroke="rgba(0,210,255,0.15)" strokeWidth="1" />
-      <circle cx="700" cy="280" r="8" fill="url(#rimGrad)" />
-      <circle cx="700" cy="280" r="5" fill="#00d4ff" opacity="0.8" />
-
-      {/* Rear brake caliper */}
-      <rect x="680" y="255" width="14" height="24" rx="3" fill="rgba(255,60,60,0.7)" />
-
-      {/* Trunk badge / logo area */}
-      <rect x="82" y="252" width="24" height="10" rx="2" fill="rgba(0,210,255,0.2)" stroke="rgba(0,210,255,0.4)" strokeWidth="0.5" />
-
-      {/* Antenna */}
-      <line x1="490" y1="108" x2="500" y2="70" stroke="rgba(0,210,255,0.3)" strokeWidth="1.5" />
-      <circle cx="500" cy="68" r="2" fill="rgba(0,210,255,0.5)" />
-
-      {/* Hood line */}
-      <path d="M680 195 Q730 190 780 195" stroke="rgba(0,210,255,0.2)" strokeWidth="1.5" fill="none" />
-      <path d="M780 195 Q800 200 820 212" stroke="rgba(0,210,255,0.15)" strokeWidth="1" fill="none" />
-
-      {/* Undercarriage glow */}
-      <ellipse cx="450" cy="295" rx="280" ry="4" fill="rgba(0,210,255,0.06)" />
-    </svg>
-  );
-}
-
 /* ─── Floating particle ───────────────────────────────────────────────── */
 function Particle({ x, y, size, duration, delay }: { x: number; y: number; size: number; duration: number; delay: number }) {
   return (
@@ -459,10 +276,21 @@ export default function Landing() {
           {/* ─── Scroll-scaling vehicle — placed BEFORE text so text is on top ─── */}
           <div
             style={{ transform: `scale(${smoothCarScale})`, opacity: carOpacity, willChange: "transform, opacity" }}
-            className="absolute inset-0 z-[1] flex items-center justify-center pointer-events-none"
+            className="absolute inset-0 z-[1] flex items-end justify-center pb-[8%] pointer-events-none"
           >
-            <div className="w-[70vw] max-w-[900px]">
-              <SleekCar />
+            <div className="relative w-[78vw] max-w-[1050px]">
+              {/* Undercar glow */}
+              <div className="absolute bottom-[-2%] left-[10%] right-[10%] h-[18%] rounded-full blur-2xl"
+                style={{ background: "radial-gradient(ellipse, rgba(0,210,255,0.55) 0%, rgba(0,160,210,0.25) 50%, transparent 80%)" }} />
+              {/* Ground shadow */}
+              <div className="absolute bottom-[-6%] left-[5%] right-[5%] h-[8%] rounded-full blur-xl"
+                style={{ background: "radial-gradient(ellipse, rgba(0,0,0,0.8) 0%, transparent 70%)" }} />
+              <img
+                src="/hero-car-nobg.png"
+                alt="Luxury parking vehicle"
+                className="w-full h-auto relative z-10"
+                style={{ filter: "drop-shadow(0 0 60px rgba(0,210,255,0.35)) drop-shadow(0 20px 40px rgba(0,0,0,0.8))" }}
+              />
             </div>
           </div>
 

@@ -1,0 +1,8 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "4aWXT1HN4DAMLl9ynXrSv"
+uri = "file://artifacts/parking-app/public/hero-car.png"
+type = "image"
+title = "luxury car hero"
