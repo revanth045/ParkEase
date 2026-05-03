@@ -45,7 +45,7 @@ try {
     .toString()
     .trim();
   console.log(`Pushing branch '${branch}' to GitHub...`);
-  run(`git push github ${branch} --follow-tags`);
+  run(`git push github ${branch} --follow-tags --force`);
 
   console.log(`\nSync complete. Branch '${branch}' is now on GitHub.`);
 } catch (err) {
