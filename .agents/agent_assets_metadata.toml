@@ -6,3 +6,9 @@ id = "4aWXT1HN4DAMLl9ynXrSv"
 uri = "file://artifacts/parking-app/public/hero-car.png"
 type = "image"
 title = "luxury car hero"
+
+[[generated]]
+id = "zswQPOo48J_fDl7Sp22bG"
+uri = "file://artifacts/parking-app/public/favicon.png"
+type = "image"
+title = "parkease favicon icon"
