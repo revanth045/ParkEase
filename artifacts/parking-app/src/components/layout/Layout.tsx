@@ -2,7 +2,6 @@ import React from "react";
 import { Link, useLocation } from "wouter";
 import { motion } from "framer-motion";
 import {
-  Car,
   LayoutDashboard,
   MapPin,
   CreditCard,
@@ -78,9 +77,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <div className="md:hidden flex items-center justify-between p-4 border-b border-border bg-card sticky top-0 z-40">
         <Link href="/">
           <div className="flex items-center gap-2 cursor-pointer">
-            <div className="h-8 w-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
-              <Car className="h-4 w-4 text-primary" />
-            </div>
+            <img src="/favicon.png" alt="ParkEase" className="h-8 w-8 rounded-lg object-cover" />
             <span className="font-bold text-lg text-foreground">ParkEase</span>
           </div>
         </Link>
@@ -92,9 +89,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           </SheetTrigger>
           <SheetContent side="left" className="w-64 bg-card border-r border-border p-6 flex flex-col gap-6">
             <div className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
-                <Car className="h-4 w-4 text-primary" />
-              </div>
+              <img src="/favicon.png" alt="ParkEase" className="h-8 w-8 rounded-lg object-cover" />
               <span className="font-bold text-xl text-foreground">ParkEase</span>
             </div>
             <div className="flex flex-col gap-1">
@@ -108,9 +103,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <div className="hidden md:flex w-60 flex-col border-r border-border bg-card p-5 gap-8 sticky top-0 h-screen overflow-y-auto">
         <Link href="/">
           <div className="flex items-center gap-2.5 cursor-pointer group">
-            <div className="h-9 w-9 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center transition-all duration-300 group-hover:bg-primary/20 group-hover:border-primary/40 group-hover:shadow-[0_0_16px_hsl(195_100%_50%/0.2)]">
-              <Car className="h-5 w-5 text-primary transition-transform duration-300 group-hover:scale-110" />
-            </div>
+            <img src="/favicon.png" alt="ParkEase" className="h-9 w-9 rounded-xl object-cover transition-all duration-300 group-hover:shadow-[0_0_16px_hsl(195_100%_50%/0.2)]" />
             <span className="font-bold text-xl tracking-tight">ParkEase</span>
           </div>
         </Link>
